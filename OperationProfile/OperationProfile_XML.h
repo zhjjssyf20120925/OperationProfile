@@ -5,7 +5,7 @@
  *  Description£º²Ù×÷XMLÎÄ¼þ
  **************************************************************************************************/
 #pragma once
-#include "OperationProfile.h"
+#include "IOperationProfile.h"
 
 class OperationProfile_XML :public IOperationProfile
 {

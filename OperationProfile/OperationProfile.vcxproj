@@ -79,7 +79,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="OperationProfile.h" />
+    <ClInclude Include="IOperationProfile.h" />
     <ClInclude Include="OperationProfile_INI.h" />
     <ClInclude Include="OperationProfile_XML.h" />
     <ClInclude Include="stdafx.h" />
