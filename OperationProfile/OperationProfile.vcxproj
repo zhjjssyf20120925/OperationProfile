@@ -80,12 +80,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OperationProfile.h" />
+    <ClInclude Include="OperationProfile_INI.h" />
     <ClInclude Include="OperationProfile_XML.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OperationProfile.cpp" />
+    <ClCompile Include="OperationProfile_INI.cpp" />
     <ClCompile Include="OperationProfile_XML.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -27,6 +27,9 @@
     <ClInclude Include="OperationProfile.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="OperationProfile_INI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="OperationProfile_XML.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -39,6 +42,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="OperationProfile_XML.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="OperationProfile_INI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
