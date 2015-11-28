@@ -7,7 +7,6 @@
 
 class IOperationProfile
 {
-
 public:
 	char* ProfileAddress = "";																						// 缓存配置文件的实际地址
 
@@ -16,7 +15,7 @@ public:
 		ProfileAddress = "";
 	};
 
-	IOperationProfile(char* profileAddress)																			// 默认配置文件存在执行文件夹里面，默认使用config.ini或者config.xml
+	IOperationProfile(char* profileAddress)																			// 配置文件地址
 	{
 		ProfileAddress = profileAddress;
 	};
@@ -33,8 +32,9 @@ public:
 	virtual	~IOperationProfile()																					// 析构函数,清除缓存的文件地址--注意，最好要定义此虚析构函数，能够避免其实现不能正常调用析构函数的问题
 	{
 		ProfileAddress = "";
+		delete ProfileAddress;
 	};
 
 private:
-	
+
 };

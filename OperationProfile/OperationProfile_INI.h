@@ -1,4 +1,3 @@
-
 /**************************************************************************************************
  *    Copyright：An individual mandate_ZHJJSSYF
  * Create Class：赵进军
@@ -15,6 +14,6 @@ public:
 	virtual	bool DeleteProfiles();																					// 删除INI配置文件
 	virtual bool UpdateProfile();																					// 更新INI配置文件
 	virtual bool ReadProfile();																						// 读取INI配置文件
-	virtual ~OperationProfile_INI();
+	virtual ~OperationProfile_INI();																				// 析构函数
 };
 
