@@ -1,7 +1,9 @@
 #pragma once
 #include "stdafx.h"
+#include <stdlib.h>
+#include <iostream>
+#include <fstream>
 #include "OperationProfile_XML.h"
-#include <string>
 
 using namespace std;
 
@@ -234,7 +236,18 @@ bool OperationProfile_XML::CreateProfile()
  ***********************************************************************************************************/
 bool OperationProfile_XML::DeleteProfile()
 {
-	return false;
+	fstream file;
+	file.open(IOperationProfile::ProfileAddress, ios::in);
+	if (!file)
+		return false;
+	file.~basic_fstream();																							// 解除被占用的文件
+
+	if (remove(IOperationProfile::ProfileAddress) != 0)
+	{
+		DWORD err = GetLastError();																					// 获取错误码
+		return false;
+	}
+	return true;
 }
 
 

@@ -79,6 +79,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConvertData.h" />
     <ClInclude Include="IOperationProfile.h" />
     <ClInclude Include="OperationProfile_INI.h" />
     <ClInclude Include="OperationProfile_XML.h" />
@@ -88,6 +89,7 @@
     <ClInclude Include="tinyxml\tinyxml.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConvertData.cpp" />
     <ClCompile Include="OperationProfile.cpp" />
     <ClCompile Include="OperationProfile_INI.cpp" />
     <ClCompile Include="OperationProfile_XML.cpp" />

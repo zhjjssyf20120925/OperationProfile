@@ -39,6 +39,9 @@
     <ClInclude Include="tinyxml\tinyxml.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ConvertData.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -63,6 +66,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="tinyxml\tinyxmlparser.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ConvertData.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

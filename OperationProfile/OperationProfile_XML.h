@@ -5,9 +5,12 @@
  *  Description：操作XML文件
  **************************************************************************************************/
 #pragma once
+
 #include "IOperationProfile.h"
 #include "tinyxml\tinystr.h"
 #include "tinyxml\tinyxml.h"
+#include "ConvertData.h"
+#include <string>
 
 
 /***********************************************************************************************************
@@ -62,12 +65,12 @@ public:
 	virtual	~OperationProfile_XML();
 
 protected:
-
-	int groupNodeCount = 2;
-	int elementCount = 3;
+	int groupNodeCount = 2;																							// 当前XML包含节点的个数
+	int elementCount = 3;																							// 每一个节点下面元素的个数
 
 	xmlElementArray xmlEleArr;
 	xmlNode xmlnode;
 	xmlEle_Attr_Value xmlNodeVar;
+	
 };
 

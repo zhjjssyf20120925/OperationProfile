@@ -10,6 +10,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	iop->ProfileAddress = "D:\\1.xml";
 	iop->CreateProfile();
+	//iop->DeleteProfile();
 
 	system("Pause");
 	return 0;
