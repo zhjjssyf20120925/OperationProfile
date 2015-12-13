@@ -64,13 +64,25 @@ public:
 	virtual bool ReadProfile();																						// 读取XML配置文件
 	virtual	~OperationProfile_XML();
 
+
+
+	bool DeleteNodeByNameIndex(char* delNodeName, int nodeIndex);													// 删除XML文件中指定位置的节点
+	bool DeleteNodeByNameAll(char* delNodeName);																	// 删除XML文件中所有符合条件的节点
+	bool GetNodePointerByName(TiXmlElement* pRootEle, char* strNodeName, TiXmlElement* &node, int nodeIndex);		// 通过节点名获取XML的节点指针
+	bool GetNodePointerByNameAll(TiXmlElement* pRootEle, char*  strNodeName, TiXmlElement* retNode[]);				// 通过节点名获取XML中所有符合条件的节点指针
+
+
+private:
+	bool XMLExits();																								// 判断XML文件是否存在
+
 protected:
 	int groupNodeCount = 2;																							// 当前XML包含节点的个数
 	int elementCount = 3;																							// 每一个节点下面元素的个数
+	int arrayIndex = 0;																								// 用于遍历XML节点的时候使用，使用之前必须为0
 
 	xmlElementArray xmlEleArr;
 	xmlNode xmlnode;
 	xmlEle_Attr_Value xmlNodeVar;
-	
+
 };
 

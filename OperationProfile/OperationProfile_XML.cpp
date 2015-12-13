@@ -223,7 +223,6 @@ bool OperationProfile_XML::CreateProfile()
 	{
 		return false;
 	}
-
 }
 
 
@@ -236,17 +235,102 @@ bool OperationProfile_XML::CreateProfile()
  ***********************************************************************************************************/
 bool OperationProfile_XML::DeleteProfile()
 {
-	fstream file;
-	file.open(IOperationProfile::ProfileAddress, ios::in);
-	if (!file)
+	if (!OperationProfile_XML::XMLExits())
 		return false;
-	file.~basic_fstream();																							// 解除被占用的文件
 
 	if (remove(IOperationProfile::ProfileAddress) != 0)
 	{
 		DWORD err = GetLastError();																					// 获取错误码
 		return false;
 	}
+	return true;
+}
+
+
+/***********************************************************************************************************
+ * 程序作者：赵进军
+ * 函数功能：删除XML文件中指定的节点的最后一个节点
+ * 参数说明：
+ * delNodeName：需要删除的节点的名称
+ *   nodeIndex：需要删除的节点的位置
+ * 注意事项：null
+ * 修改日期：2015/12/12 16:49:00
+ ***********************************************************************************************************/
+bool OperationProfile_XML::DeleteNodeByNameIndex(char* delNodeName, int nodeIndex)
+{
+	if (nodeIndex >= groupNodeCount)
+		printf("当前删除的节点位置不存在!");
+
+	if (!OperationProfile_XML::XMLExits())
+		return false;
+
+	TiXmlDocument* myDocument = new TiXmlDocument();
+
+	if (NULL == myDocument)
+		return false;
+	myDocument->LoadFile(IOperationProfile::ProfileAddress);
+
+	TiXmlElement* pRootEle = myDocument->RootElement();
+	if (NULL == pRootEle)
+		return false;
+
+	TiXmlElement *pNode = NULL;
+
+	if (arrayIndex != 0)
+		arrayIndex = 0;
+	if (!GetNodePointerByName(pRootEle, delNodeName, pNode, nodeIndex))
+		return false;
+
+	if (pRootEle == pNode)
+	{
+		if (myDocument->RemoveChild(pRootEle))
+		{
+			myDocument->SaveFile(IOperationProfile::ProfileAddress);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	if (NULL != pNode)
+	{
+		TiXmlNode* pParNode = pNode->Parent();
+		if (NULL == pParNode)
+			return false;
+
+		TiXmlElement* pParentEle = pParNode->ToElement();
+		if (NULL != pParentEle)
+		{
+			if (pParentEle->RemoveChild(pNode))
+				myDocument->SaveFile(IOperationProfile::ProfileAddress);
+			else
+				return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+	return false;
+}
+
+
+/***********************************************************************************************************
+ * 程序作者：赵进军
+ * 函数功能：判断XML文件是否存在
+ * 参数说明：null
+ * 注意事项：null
+ * 修改日期：2015/12/12 16:52:00
+ ***********************************************************************************************************/
+bool OperationProfile_XML::XMLExits()
+{
+	fstream file;
+	file.open(IOperationProfile::ProfileAddress, ios::in);
+	if (!file)
+		return false;
+	//file.~basic_fstream();																							// 解除被占用的文件
 	return true;
 }
 
@@ -275,3 +359,179 @@ bool OperationProfile_XML::ReadProfile()
 {
 	return false;
 }
+
+
+/***********************************************************************************************************
+ * 程序作者：赵进军
+ * 函数功能：通过节点名获取XML的节点指针
+ * 参数说明：
+ *    pRootEle：XML文件的根节点
+ * strNodeName：需要获取的节点指针的名称
+ *		  node：获取到的符合条件的节点指针
+ *   nodeIndex：节点的位置
+ * 注意事项：在使用该函数之前 arrayIndex全局变量必须置为0
+ * 修改日期：2015/12/12 17:18:00
+ ***********************************************************************************************************/
+bool OperationProfile_XML::GetNodePointerByName(TiXmlElement* pRootEle, char* strNodeName, TiXmlElement* &node, int nodeIndex)
+{
+	if (pRootEle == NULL)
+		return false;
+
+	if (!strcmp(strNodeName, pRootEle->Value()))																			// 假如等于节点名就自动退出
+	{
+		if (arrayIndex == nodeIndex)
+			node = pRootEle;
+		arrayIndex++;
+		return true;
+	}
+
+	TiXmlElement* pchild = pRootEle->FirstChildElement();
+	while (pchild)
+	{
+		int t = pchild->Type();
+
+		if (t == TiXmlNode::TINYXML_ELEMENT)
+			GetNodePointerByName(pchild, strNodeName, node, nodeIndex);
+		pchild = pchild->NextSiblingElement();
+	}
+
+	if (NULL == node)
+		return false;
+	else
+		return true;
+}
+
+
+/***********************************************************************************************************
+ * 程序作者：赵进军
+ * 函数功能：通过节点名获取XML中所有符合条件的节点指针
+ * 参数说明：
+ *    pRootEle：XML文件的根节点
+ * strNodeName：需要获取的节点指针的名称
+ *     retNode：获取到的符合条件的节点指针数组
+ * 注意事项：在使用该函数之前 arrayIndex全局变量必须置为0
+ * 修改日期：2015/12/13 13:56:00
+ ***********************************************************************************************************/
+bool OperationProfile_XML::GetNodePointerByNameAll(TiXmlElement* pRootEle, char*  strNodeName, TiXmlElement* retNode[])
+{
+	if (pRootEle == NULL)
+		return false;
+
+	if (!strcmp(strNodeName, pRootEle->Value()))																			// 假如等于节点名就自动退出
+	{
+		if (arrayIndex < groupNodeCount)
+			retNode[arrayIndex] = pRootEle;
+		else
+			printf("请重新定义节点的数量");
+		arrayIndex++;
+		return true;
+	}
+
+	TiXmlElement* pchild = pRootEle->FirstChildElement();
+	while (pchild)
+	{
+		int t = pchild->Type();
+
+		if (t == TiXmlNode::TINYXML_ELEMENT)
+			GetNodePointerByNameAll(pchild, strNodeName, retNode);
+
+		pchild = pchild->NextSiblingElement();
+	}
+
+	if (NULL == retNode)
+		return false;
+	else
+		return true;
+}
+
+
+/***********************************************************************************************************
+ * 程序作者：赵进军
+ * 函数功能：删除XML文件中所有符合条件的节点
+ * 参数说明：
+ * strNodeName：需要获取的节点指针的名称
+ * 注意事项：null
+ * 修改日期：2015/12/13 14:52:00
+ ***********************************************************************************************************/
+bool OperationProfile_XML::DeleteNodeByNameAll(char* delNodeName)
+{
+	if (!OperationProfile_XML::XMLExits())
+		return false;
+
+	TiXmlDocument* myDocument = new TiXmlDocument();
+
+	if (NULL == myDocument)
+		return false;
+	myDocument->LoadFile(IOperationProfile::ProfileAddress);
+
+	TiXmlElement* pRootEle = myDocument->RootElement();
+	if (NULL == pRootEle)
+		return false;
+
+	if (arrayIndex != 0)
+		arrayIndex = 0;
+	TiXmlElement* pNodes[] = { NULL, NULL };																		// 该处设计存在缺陷，无法定义动态数组
+	GetNodePointerByNameAll(pRootEle, delNodeName, pNodes);
+
+
+	if (pRootEle == pNodes[0])
+	{
+		if (myDocument->RemoveChild(pRootEle))
+		{
+			myDocument->SaveFile(IOperationProfile::ProfileAddress);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	if (NULL != pNodes)
+	{
+		for (int i = 0; i < groupNodeCount; i++)
+		{
+			TiXmlNode* pParNode = pNodes[i]->Parent();
+			if (NULL == pParNode)
+				return false;
+
+			TiXmlElement* pParentEle = pParNode->ToElement();
+			if (NULL != pParentEle)
+			{
+				if (pParentEle->RemoveChild(pNodes[i]))
+					myDocument->SaveFile(IOperationProfile::ProfileAddress);
+				else
+					return false;
+			}
+		}
+	}
+	else
+	{
+		return false;
+	}
+	return false;
+}
+
+
+//bool OperationProfile_XML::ParaseUpdateXml(TiXmlElement* pParent, char* strNodeName, TiXmlElement* &node)
+//{
+//	if (pParent == NULL)
+//		return false;
+//	if (!strcmp(strNodeName, pParent->Value()))																			// 假如等于节点名就自动退出
+//	{
+//		node = pParent;
+//		return true;
+//	}
+//
+//	TiXmlElement* pchild = pParent->FirstChildElement();
+//	while (pchild)
+//	{
+//		int t = pchild->Type();
+//		if (t == TiXmlNode::TINYXML_ELEMENT)
+//		{
+//			ParaseUpdateXml(pchild, strNodeName, node);
+//		}
+//		pchild = pchild->NextSiblingElement();
+//	}
+//	return false;
+//}

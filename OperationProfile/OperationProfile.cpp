@@ -6,12 +6,17 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	IOperationProfile*  iop = new OperationProfile_XML();
+	/*IOperationProfile*  iop = new OperationProfile_XML();
 
-	iop->ProfileAddress = "D:\\1.xml";
-	iop->CreateProfile();
+	iop->ProfileAddress = "D:\\1.xml";*/
+	//iop->CreateProfile();
 	//iop->DeleteProfile();
 
+
+	OperationProfile_XML op_xml;
+	op_xml.ProfileAddress = "D:\\1.xml";
+	op_xml.CreateProfile();
+	op_xml.DeleteNodeByNameIndex("age", 1);
 	system("Pause");
 	return 0;
 }
