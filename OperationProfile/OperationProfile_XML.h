@@ -53,7 +53,6 @@ struct xmlElementArray
 };
 
 
-
 class OperationProfile_XML :public IOperationProfile
 {
 public:
@@ -64,10 +63,12 @@ public:
 	virtual bool ReadProfile();																						// 读取XML配置文件
 	virtual	~OperationProfile_XML();
 
-
-
 	bool DeleteNodeByNameIndex(char* delNodeName, int nodeIndex);													// 删除XML文件中指定位置的节点
 	bool DeleteNodeByNameAll(char* delNodeName);																	// 删除XML文件中所有符合条件的节点
+
+	bool UpdateProfileIndexText(char* delNodeName, int nodeIndex, char* newStr);									// 更新XML文件中指定节点名的节点Text
+	bool UpdateProfileAllText(char* delNodeName, char* newStr);														// 更新XML文件中指定节点名的节点Text
+
 	bool GetNodePointerByName(TiXmlElement* pRootEle, char* strNodeName, TiXmlElement* &node, int nodeIndex);		// 通过节点名获取XML的节点指针
 	bool GetNodePointerByNameAll(TiXmlElement* pRootEle, char*  strNodeName, TiXmlElement* retNode[]);				// 通过节点名获取XML中所有符合条件的节点指针
 

@@ -449,7 +449,7 @@ bool OperationProfile_XML::GetNodePointerByNameAll(TiXmlElement* pRootEle, char*
  * 程序作者：赵进军
  * 函数功能：删除XML文件中所有符合条件的节点
  * 参数说明：
- * strNodeName：需要获取的节点指针的名称
+ * strNodeName：需要删除的节点指针的名称
  * 注意事项：null
  * 修改日期：2015/12/13 14:52:00
  ***********************************************************************************************************/
@@ -497,12 +497,8 @@ bool OperationProfile_XML::DeleteNodeByNameAll(char* delNodeName)
 
 			TiXmlElement* pParentEle = pParNode->ToElement();
 			if (NULL != pParentEle)
-			{
 				if (pParentEle->RemoveChild(pNodes[i]))
 					myDocument->SaveFile(IOperationProfile::ProfileAddress);
-				else
-					return false;
-			}
 		}
 	}
 	else
@@ -513,25 +509,110 @@ bool OperationProfile_XML::DeleteNodeByNameAll(char* delNodeName)
 }
 
 
-//bool OperationProfile_XML::ParaseUpdateXml(TiXmlElement* pParent, char* strNodeName, TiXmlElement* &node)
-//{
-//	if (pParent == NULL)
-//		return false;
-//	if (!strcmp(strNodeName, pParent->Value()))																			// 假如等于节点名就自动退出
-//	{
-//		node = pParent;
-//		return true;
-//	}
-//
-//	TiXmlElement* pchild = pParent->FirstChildElement();
-//	while (pchild)
-//	{
-//		int t = pchild->Type();
-//		if (t == TiXmlNode::TINYXML_ELEMENT)
-//		{
-//			ParaseUpdateXml(pchild, strNodeName, node);
-//		}
-//		pchild = pchild->NextSiblingElement();
-//	}
-//	return false;
-//}
+/***********************************************************************************************************
+ * 程序作者：赵进军
+ * 函数功能：更新XML文件中指定节点名的节点Text
+ * 参数说明：
+ * strNodeName：需要更新的节点指针的名称
+ *   nodeIndex：需要更新的节点的位置
+ *		newStr：更新后的节点的内容
+ * 注意事项：null
+ * 修改日期：2015/12/13 15:09:00
+ ***********************************************************************************************************/
+bool OperationProfile_XML::UpdateProfileIndexText(char* delNodeName, int nodeIndex, char* newStr)
+{
+	if (nodeIndex >= groupNodeCount)
+		printf("当前更新的节点位置不存在!");
+
+	if (!OperationProfile_XML::XMLExits())
+		return false;
+
+	TiXmlDocument* myDocument = new TiXmlDocument();
+
+	if (NULL == myDocument)
+		return false;
+	myDocument->LoadFile(IOperationProfile::ProfileAddress);
+
+	TiXmlElement* pRootEle = myDocument->RootElement();
+	if (NULL == pRootEle)
+		return false;
+
+	TiXmlElement *pNode = NULL;
+
+	if (arrayIndex != 0)
+		arrayIndex = 0;
+	if (!GetNodePointerByName(pRootEle, delNodeName, pNode, nodeIndex))
+		return false;
+
+	if (pRootEle == pNode)
+		return false;
+
+	if (NULL != pNode)
+	{
+		pNode->Clear();
+		TiXmlText *AgeContent = new TiXmlText(newStr);
+		if (pNode->LinkEndChild(AgeContent))
+		{
+			myDocument->SaveFile(IOperationProfile::ProfileAddress);
+			return true;
+		}
+		else
+			return false;
+	}
+	else
+	{
+		return false;
+	}
+	return false;
+}
+
+
+/***********************************************************************************************************
+ * 程序作者：赵进军
+ * 函数功能：更新XML文件中指定节点名的节点Text
+ * 参数说明：
+ * strNodeName：需要更新的节点指针的名称
+ *		newStr：更新后的节点的内容
+ * 注意事项：null
+ * 修改日期：2015/12/13 15:46:00
+ ***********************************************************************************************************/
+bool OperationProfile_XML::UpdateProfileAllText(char* delNodeName, char* newStr)
+{
+	if (!OperationProfile_XML::XMLExits())
+		return false;
+
+	TiXmlDocument* myDocument = new TiXmlDocument();
+
+	if (NULL == myDocument)
+		return false;
+	myDocument->LoadFile(IOperationProfile::ProfileAddress);
+
+	TiXmlElement* pRootEle = myDocument->RootElement();
+	if (NULL == pRootEle)
+		return false;
+
+	if (arrayIndex != 0)
+		arrayIndex = 0;
+	TiXmlElement* pNodes[] = { NULL, NULL };																		// 该处设计存在缺陷，无法定义动态数组
+
+	if (arrayIndex != 0)
+		arrayIndex = 0;
+	if (!GetNodePointerByNameAll(pRootEle, delNodeName, pNodes))
+		return false;
+
+	if (NULL != pNodes)
+	{
+		for (int i = 0; i < groupNodeCount; i++)
+		{
+			if (pRootEle == pNodes[i])
+				continue;
+			pNodes[i]->Clear();
+			TiXmlText *AgeContent = new TiXmlText(newStr);
+			if (pNodes[i]->LinkEndChild(AgeContent))
+				myDocument->SaveFile(IOperationProfile::ProfileAddress);
+		}
+	}
+	else
+		return false;
+	return true;
+}
