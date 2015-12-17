@@ -357,7 +357,69 @@ bool OperationProfile_XML::UpdateProfile()
  ***********************************************************************************************************/
 bool OperationProfile_XML::ReadProfile()
 {
-	return false;
+	if (!OperationProfile_XML::XMLExits())
+		return false;
+
+	TiXmlDocument* myDocument = new TiXmlDocument();
+
+	if (NULL == myDocument)
+		return false;
+	myDocument->LoadFile(IOperationProfile::ProfileAddress);
+
+	TiXmlElement* pRootEle = myDocument->RootElement();
+
+	myDocument->FirstChild();
+	if (NULL == pRootEle)
+		return false;
+	GetXmlDataAll(pRootEle,"Person");
+
+	return true;
+}
+
+
+/***********************************************************************************************************
+ * 程序作者：赵进军
+ * 函数功能：获取 XML文件所有的数据
+ * 参数说明：null
+ * 注意事项：null
+ * 修改日期：2015/12/14 23:10:00
+ ***********************************************************************************************************/
+void OperationProfile_XML::GetXmlDataAll(TiXmlNode* pRootEle, char* groupName)
+{
+	if (NULL == pRootEle)
+		return;
+
+	TiXmlNode* pElement = pRootEle->FirstChild();
+	TiXmlElement* element;
+	TiXmlAttribute* attr;
+	int kl;
+	for (; pElement; pElement = pElement->NextSibling())
+	{
+		int nType = pElement->Type();
+		switch (nType)
+		{
+		case TiXmlNode::TINYXML_ELEMENT:
+			element = pElement->ToElement();
+			if (element != NULL)
+			{
+				attr = element->FirstAttribute();
+				if (attr != NULL)
+					std::cout << attr->Value() << std::endl;
+			}
+			GetXmlDataAll(pElement, groupName);
+			break;
+
+		case TiXmlNode::TINYXML_TEXT:
+			std::cout << pElement->Value() << std::endl;
+			break;
+
+		case TiXmlNode::TINYXML_DOCUMENT:
+			kl = 0;
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 

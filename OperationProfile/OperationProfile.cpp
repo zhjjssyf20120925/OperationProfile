@@ -16,7 +16,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	OperationProfile_XML op_xml;
 	op_xml.ProfileAddress = "D:\\1.xml";
 	op_xml.CreateProfile();
-	op_xml.UpdateProfileAllText("age", "10000");
+	op_xml.ReadProfile();
+	//op_xml.UpdateProfileAllText("age", "10000");
 	//op_xml.DeleteNodeByNameIndex("age", 1);
 	system("Pause");
 	return 0;

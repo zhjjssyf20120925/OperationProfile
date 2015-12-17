@@ -72,6 +72,8 @@ public:
 	bool GetNodePointerByName(TiXmlElement* pRootEle, char* strNodeName, TiXmlElement* &node, int nodeIndex);		// 通过节点名获取XML的节点指针
 	bool GetNodePointerByNameAll(TiXmlElement* pRootEle, char*  strNodeName, TiXmlElement* retNode[]);				// 通过节点名获取XML中所有符合条件的节点指针
 
+	void GetXmlDataAll(TiXmlNode* pRootEle, char* groupName);														// 获取 XML文件所有的数据
+
 
 private:
 	bool XMLExits();																								// 判断XML文件是否存在
@@ -84,6 +86,12 @@ protected:
 	xmlElementArray xmlEleArr;
 	xmlNode xmlnode;
 	xmlEle_Attr_Value xmlNodeVar;
+
+
+
+	xmlElementArray ReadxmlEleArr;																					// 用于缓存读取的结果
+	xmlNode Readxmlnode;																							// 用于缓存读取结果下面的节点数量
+	xmlEle_Attr_Value ReadxmlNodeVar;																				// 用于缓存读取结果下面每一个元素的属性信息
 
 };
 
